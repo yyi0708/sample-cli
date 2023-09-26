@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "declaration": true,
+    "strict": true,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "allowJs": true,
+    "outDir": "dist",
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "paths": {
+      "@/*": ["./*"],
+      "Lib/*": ["src/lib/*"],
+      "IOC/*": ["./src/IOC/*"],
+      "Types/*": ["./types/*"]
+    }
+  },
+  "include": ["src", "scripts", "types", "template"],
+  "exclude": ["node_modules", "dist"]
+}
