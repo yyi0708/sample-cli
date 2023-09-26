@@ -1,5 +1,5 @@
 {
-  "name": "sample-cli",
+  "name": "sample-quick-cli",
   "version": "0.1.0",
   "description": "提升效率的脚手架",
   "main": "dist/bundle.min.js",
@@ -10,7 +10,8 @@
     }
   },
   "bin": {
-    "sample-cli": "./dist/bundle.min.js",
+    "sample-quick-cli": "./dist/bundle.min.js",
+    "sqc": "./dist/bundle.min.js",
     "sc": "./dist/bundle.min.js"
   },
   "scripts": {
@@ -23,6 +24,18 @@
   },
   "author": "yi.yang",
   "license": "ISC",
+  "homepage": "https://github.com/yyi0708/sample-cli.git",
+  "files": ["scripts", "dist", "template", "README.md"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yyi0708/sample-cli.git"
+  },
+  "keywords": [
+    "cli",
+    "sample-cli",
+    "typescript",
+    "node"
+  ],
   "devDependencies": {
     "@rollup/plugin-alias": "^4.0.3",
     "@rollup/plugin-commonjs": "^24.0.1",
@@ -59,14 +72,5 @@
     "tslib": "^2.5.0",
     "tsx": "^3.12.6",
     "typescript": "^4.9.5"
-  },
-  "files": ["scripts", "dist", "template"],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/yyi0708/sample-cli.git"
-  },
-  "keywords": [
-    "cli",
-    "sample-cli"
-  ]
+  }
 }
