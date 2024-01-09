@@ -1,11 +1,11 @@
-import { existsSync } from 'fs-extra'
+import { pathExistsSync } from 'fs-extra/esm'
 import { join, posix } from 'path'
 import { CommandLoader } from './loader'
 
 const localBinPathSegments = [process.cwd(), 'node_modules', 'sample-cli']
 
 export function localBinExists() {
-  return existsSync(join(...localBinPathSegments))
+  return pathExistsSync(join(...localBinPathSegments))
 }
 
 export function loadLocalBinCommandLoader(): typeof CommandLoader {

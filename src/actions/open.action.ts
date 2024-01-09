@@ -25,7 +25,7 @@ export class OpenAction implements Actions.IAction {
       const target = (options.find((item) => item.name === 'target')?.value ||
         '') as string
       const browser = (options.find((item) => item.name === 'browser')?.value ||
-        apps.browser) as unknown as string
+      'google chrome') as unknown as string
 
       await this.execOpen(type, target, browser)
     } catch (error) {
@@ -37,7 +37,7 @@ export class OpenAction implements Actions.IAction {
   private async execOpen(
     type: string,
     content: string,
-    browser = apps.browser
+    browser = 'google chrome'
   ): Promise<void> {
     try {
       switch (type) {

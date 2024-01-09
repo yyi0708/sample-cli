@@ -1,15 +1,12 @@
 import {
-  CopyOptions,
   copy,
-  readFile,
-  writeFile,
   pathExists,
-  readdir,
   readJson,
-  writeJson,
-  stat,
-  statSync
-} from 'fs-extra'
+  writeJson
+} from 'fs-extra/esm'
+import type { CopyOptions } from 'fs-extra'
+import { readFile, writeFile, readdir, stat } from 'node:fs/promises'
+import { statSync } from 'node:fs'
 import { IReader } from './reader'
 import { injectable } from 'IOC/index'
 import { join } from 'path'
@@ -39,18 +36,13 @@ export class FileSystemReader implements IReader {
   }
 
   public async readFile(src: string): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
-      readFile(
-        join(this._dir, src),
-        (error: NodeJS.ErrnoException | null, data: Buffer) => {
-          if (error) {
-            reject(error)
-          } else {
-            resolve(data.toString())
-          }
-        }
-      )
-    })
+    try {
+      const filePath = join(this._dir, src)
+      const contents = await readFile(filePath, { encoding: 'utf8' })
+      return contents
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   public async readAnyOf(filenames: string[]): Promise<string> {

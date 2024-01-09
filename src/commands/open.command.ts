@@ -123,9 +123,7 @@ export class OpenCommand implements Commands.ICommand {
           choices: [
             apps.chrome,
             apps.edge,
-            apps.firefox,
-            apps.browser,
-            apps.browserPrivate
+            apps.firefox
           ],
           when: (content) => content.type === OpenType.LINK
         },

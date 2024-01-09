@@ -1,8 +1,11 @@
 import { injectable } from 'IOC/index'
-import { writeFileSync, writeFile, ensureFileSync } from 'fs-extra'
+import { ensureFileSync } from 'fs-extra'
+import { writeFileSync} from 'node:fs'
 import { join } from 'path'
-const download = require('download')
-const downGitRepo = require('download-git-repo')
+import download from 'download'
+import downGitRepo from 'download-git-repo'
+// const download = require('download')
+// const downGitRepo = require('download-git-repo')
 import ora from 'ora'
 import { Message } from 'Lib/ui'
 
@@ -34,7 +37,7 @@ export class RemoteDownload implements Download.IDownlaod {
         obj.source.map(async (url, index) => {
           if (obj.path?.[index]) {
             ensureFileSync(obj.path?.[index])
-            writeFile(obj.path?.[index], await download(url))
+            writeFileSync(obj.path?.[index], await download(url))
           }
           return download(url)
         })

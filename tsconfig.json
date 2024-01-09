@@ -4,7 +4,7 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "node",
-    "declaration": true,
+    "declaration": false,
     "strict": true,
     "noImplicitAny": false,
     "strictNullChecks": false,
@@ -21,6 +21,6 @@
       "Types/*": ["./types/*"]
     }
   },
-  "include": ["src", "scripts", "types", "template"],
+  "include": ["src", "scripts", "types", "template", "*.ts"],
   "exclude": ["node_modules", "dist"]
 }

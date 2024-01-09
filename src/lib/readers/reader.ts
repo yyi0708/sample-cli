@@ -1,4 +1,4 @@
-import { CopyOptions } from 'fs-extra'
+import type { CopyOptions } from 'fs-extra'
 
 export interface IReader {
   get directory(): string

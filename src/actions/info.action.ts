@@ -11,7 +11,8 @@ import { platform, release } from 'os'
 import { join } from 'path'
 import { Message } from 'Lib/ui'
 import { Runner } from 'Lib/utils'
-const cfonts = require('cfonts')
+// const cfonts = require('cfonts')
+import cfonts from 'cfonts'
 
 @injectable()
 export class InfoAction implements Actions.IAction {
@@ -104,7 +105,7 @@ export class InfoAction implements Actions.IAction {
 
   private async displayCliVersion(): Promise<void> {
     const pkg = await this._reader.readJson<Record<string, any>>(
-      join(__dirname, '../package.json'),
+      join(process.cwd(), 'package.json'),
       true
     )
 

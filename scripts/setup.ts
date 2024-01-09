@@ -1,8 +1,8 @@
-import { pathExists, writeJSON, ensureFile } from 'fs-extra'
-import { Message } from 'Lib/ui'
+import { pathExists, writeJSON, ensureFile } from 'fs-extra/esm'
+import { Message } from '@/src/lib/ui'
 import {  appConfigFilePath, createConfigFilePath, openConfigFilePath } from 'Lib/utils'
 import { appConfig, createConfig, openConfig } from '@/template/default'
-const cfonts = require('cfonts')
+import cfonts from 'cfonts'
 
 // local file map
 const pathData = [
