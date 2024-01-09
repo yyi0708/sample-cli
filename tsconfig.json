@@ -18,6 +18,8 @@
       "@/*": ["./*"],
       "Lib/*": ["src/lib/*"],
       "IOC/*": ["./src/IOC/*"],
+      "Actions/*": ["./src/actions/*"],
+      "Commands/*": ["./src/commands/*"],
       "Types/*": ["./types/*"]
     }
   },
