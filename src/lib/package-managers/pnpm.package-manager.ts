@@ -1,6 +1,6 @@
 import { AbstractPackageManager } from './abstract.package-manager'
 import { injectable, inject, AbstractRunner, TYPES } from 'IOC/index'
-import { Runner } from 'Lib/utils'
+import { Runner } from '@/src/tools/utils'
 
 @injectable()
 export class PnpmPackageManager extends AbstractPackageManager {

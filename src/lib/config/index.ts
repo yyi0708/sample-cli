@@ -1,5 +1,5 @@
 import { injectable, inject, TYPES, IReader } from 'IOC/index'
-import { currentDirConfigFile, appConfigFilePath, createConfigFilePath, openConfigFilePath } from 'Lib/utils'
+import { currentDirConfigFile, appConfigFilePath, createConfigFilePath, openConfigFilePath } from '@/src/tools/utils'
 
 @injectable()
 export class UserConfig implements Config.IConfig {

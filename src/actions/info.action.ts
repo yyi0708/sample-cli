@@ -9,8 +9,8 @@ import {
 import osName from 'os-name'
 import { platform, release } from 'os'
 import { join } from 'path'
-import { Message } from 'Lib/ui'
-import { Runner } from 'Lib/utils'
+import { Message } from '@/src/tools/ui'
+import { Runner } from '@/src/tools/utils'
 // const cfonts = require('cfonts')
 import cfonts from 'cfonts'
 

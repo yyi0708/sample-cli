@@ -1,7 +1,7 @@
 import { SpawnOptions, ChildProcess } from 'child_process'
 import { spawn } from 'cross-spawn'
-import { Message } from 'Lib/ui'
-import { Runner } from 'Lib/utils'
+import { Message } from '@/src/tools/ui'
+import { Runner } from '@/src/tools/utils'
 import { injectable } from 'IOC/index'
 
 @injectable()

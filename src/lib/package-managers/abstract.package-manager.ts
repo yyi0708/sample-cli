@@ -7,8 +7,8 @@ import {
   IReader,
   AbstractRunner
 } from 'IOC/index'
-import { normalizeToKebabOrSnakeCase } from 'Lib/utils'
-import { Message } from 'Lib/ui'
+import { normalizeToKebabOrSnakeCase } from '@/src/tools/utils'
+import { Message } from '@/src/tools/ui'
 import ora from 'ora'
 import { join } from 'path'
 

@@ -1,6 +1,6 @@
 import { injectable, inject, TYPES, IPackageManagerFactory } from 'IOC/index'
-import { Message } from 'Lib/ui'
-import { Runner } from 'Lib/utils'
+import { Message } from '@/src/tools/ui'
+import { Runner } from '@/src/tools/utils'
 
 @injectable()
 export class CreateAction implements Actions.IAction {

@@ -1,5 +1,5 @@
 import { availableLanguages, sourcePrefixes } from './constant'
-import { Message } from 'Lib/ui'
+import { Message } from '@/src/tools/ui'
 
 // 提供配置选项类型支持
 export function defineConfig(config: Config.UserConfigExport) {

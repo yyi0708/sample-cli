@@ -1,4 +1,4 @@
-import { Runner } from 'Lib/utils'
+import { Runner } from '@/src/tools/utils'
 import { AbstractPackageManager } from './abstract.package-manager'
 
 export interface PackageManagerCommands {

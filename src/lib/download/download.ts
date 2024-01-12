@@ -7,7 +7,7 @@ import downGitRepo from 'download-git-repo'
 // const download = require('download')
 // const downGitRepo = require('download-git-repo')
 import ora from 'ora'
-import { Message } from 'Lib/ui'
+import { Message } from '@/src/tools/ui'
 
 @injectable()
 export class RemoteDownload implements Download.IDownlaod {

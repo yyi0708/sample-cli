@@ -1,6 +1,6 @@
 import { pathExists, writeJSON, ensureFile } from 'fs-extra/esm'
-import { Message } from '@/src/lib/ui'
-import {  appConfigFilePath, createConfigFilePath, openConfigFilePath } from 'Lib/utils'
+import { Message } from '@/src/tools/ui'
+import {  appConfigFilePath, createConfigFilePath, openConfigFilePath } from '@/src/tools/utils'
 import { appConfig, createConfig, openConfig } from '@/template/default'
 import cfonts from 'cfonts'
 

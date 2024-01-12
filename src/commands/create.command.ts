@@ -1,7 +1,7 @@
 import { Command } from 'commander'
 import { Commands } from 'Types/command'
 import { TYPES, injectable, inject, IQuestion } from 'IOC/index'
-import { Message } from 'Lib/ui'
+import { Message } from '@/src/tools/ui'
 import fuzzy from 'fuzzy'
 
 @injectable()

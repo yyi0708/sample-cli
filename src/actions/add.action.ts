@@ -20,8 +20,8 @@ import {
   prettierrc,
   prettierIgnore,
   eslintIgnore
-} from 'Lib/utils'
-import { Message } from 'Lib/ui'
+} from '@/src/tools/utils'
+import { Message } from '@/src/tools/ui'
 import fg from 'fast-glob'
 import semver from 'semver'
 

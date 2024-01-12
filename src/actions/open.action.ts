@@ -1,6 +1,6 @@
 import { apps } from 'open'
 import { injectable, inject, TYPES, IOpen } from 'IOC/index'
-import { Message } from '../lib/ui'
+import { Message } from '../tools/ui'
 import { join } from 'path'
 
 enum OpenType {

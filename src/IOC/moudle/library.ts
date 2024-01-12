@@ -20,7 +20,7 @@ import {
     IOpen,
     Open
   } from 'Lib/module'
-import { Runner } from 'Lib/utils'
+import { Runner } from '@/src/tools/utils'
 
 export const library = new ContainerModule((bind: interfaces.Bind,) => {
     bind<Download.IDownlaod>(TYPES.LibDownload).to(RemoteDownload)

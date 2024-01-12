@@ -1,7 +1,7 @@
 import open, { openApp, OpenAppOptions, Options } from 'open'
 import { IOpen } from './interface'
 import { injectable } from 'IOC/index'
-import { Message } from 'Lib/ui'
+import { Message } from '@/src/tools/ui'
 
 @injectable()
 export class Open implements IOpen {

@@ -1,7 +1,7 @@
 import { Command } from 'commander'
 import { Commands } from 'Types/command'
 import { TYPES, injectable, inject } from 'IOC/index'
-import { Message } from 'Lib/ui'
+import { Message } from '@/src/tools/ui'
 
 type OptionsType = 'dryRun' | 'skipInstall' | 'project' | 'template'
 

@@ -2,7 +2,7 @@
 
 import { Command } from 'commander'
 import pkg from '@/package.json'
-import { CommandLoader } from 'Lib/utils/loader'
+import { CommandLoader } from '@/src/tools/utils/loader'
 
 const program = new Command()
 
