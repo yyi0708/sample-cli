@@ -4,8 +4,6 @@ import { writeFileSync} from 'node:fs'
 import { join } from 'path'
 import download from 'download'
 import downGitRepo from 'download-git-repo'
-// const download = require('download')
-// const downGitRepo = require('download-git-repo')
 import ora from 'ora'
 import { Message } from '@/src/tools/ui'
 

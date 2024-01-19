@@ -20,3 +20,9 @@ export const openConfigFilePath = join(
   '.sample-cli',
   'open.config.json'
 )
+
+export const sqlitePath = join(
+  os.homedir(),
+  '.sample-cli',
+  'database.sqlite'
+)

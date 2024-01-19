@@ -1,4 +1,3 @@
-import 'reflect-metadata'
 import { Container, interfaces } from 'inversify'
 import { TYPES } from './types'
 export { injectable, inject } from 'inversify'

@@ -25,7 +25,8 @@
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "package.json"
   ],
   "repository": {
     "type": "git",
@@ -67,7 +68,9 @@
     "reflect-metadata": "^0.1.13",
     "sample-quick-cli": "^0.1.7",
     "semver": "^7.5.1",
+    "sqlite3": "^5.1.7",
     "tsx": "^3.12.6",
+    "typeorm": "^0.3.19",
     "typescript": "^4.9.5"
   }
 }

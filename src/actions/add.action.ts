@@ -29,8 +29,7 @@ import semver from 'semver'
 export class AddAction implements Actions.IAction {
   @inject(TYPES.LibReader) private _reader: IReader
   @inject(TYPES.LibQuestion) private _question: IQuestion
-  @inject(TYPES.LibPackageManagerFactory)
-  private _packageManagerFactory: IPackageManagerFactory
+  @inject(TYPES.LibPackageManagerFactory) private _packageManagerFactory: IPackageManagerFactory
 
   public async handle(
     inputs?: Input[],

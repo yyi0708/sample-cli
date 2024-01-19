@@ -18,6 +18,7 @@
       "@/*": ["./*"],
       "Lib/*": ["src/lib/*"],
       "IOC/*": ["./src/IOC/*"],
+      "Tools/*": ["./src/tools/*"],
       "Actions/*": ["./src/actions/*"],
       "Commands/*": ["./src/commands/*"],
       "Types/*": ["./types/*"]
