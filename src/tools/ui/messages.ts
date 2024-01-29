@@ -24,15 +24,17 @@ export const Message = {
       chalk.bold(commandToRunManually)
     )} to see more details on why it errored out.`,
 
+  // 状态设置
   sucess: (msg: string): void =>
-    console.log(EMOJIS.SUCCESS + ' ' + chalk.green(msg) + ' ' + EMOJIS.SUNNY),
+    console.log(EMOJIS.SUCCESS + ' ' + chalk.green(msg)),
   fail: (msg: string): void =>
-    console.log(EMOJIS.ERROR + ' ' + chalk.red(msg) + ' ' + EMOJIS.RAIN),
+    console.log(EMOJIS.ERROR + ' ' + chalk.red(msg)),
   warn: (msg: string): void =>
     console.log(
-      EMOJIS.WARN + ' ' + chalk.yellow(msg) + ' ' + EMOJIS.PARTLYSUNNY
+      EMOJIS.WARN + ' ' + chalk.yellow(msg)
     ),
-
+    
+  // 动态设置
   chalk: (options: ChalkOptions): void => {
     const prefixTxt = options.prefix
       ? chalk[options.prefix.color](options.prefix.text) + ' '

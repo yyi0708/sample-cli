@@ -5,7 +5,11 @@ export enum ProjectType {
     REMOTE = "remote"
 }
 
-export type RepoType = 'github' | 'gitlab' | 'bitbucket'
+export enum RepoType {
+    GIT = "github",
+    GITLAB = "gitlab",
+    BITBUCKET = "bitbucket"
+}
 
 @Entity()
 export class Project extends BaseEntity {
@@ -20,12 +24,8 @@ export class Project extends BaseEntity {
     @Column('varchar')
     content: string
 
-    @Column({
-        type: "enum",
-        enum: ProjectType,
-        default: ProjectType.REMOTE
-    })
-    type: ProjectType
+    @Column('varchar')
+    type: string
 
     @Column('varchar', {
         nullable: true,
@@ -33,14 +33,12 @@ export class Project extends BaseEntity {
     })
     tips: string
 
-    @Column({
-        type: "enum",
-        enum: ["github", "gitlab", "bitbucket"],
+    @Column('varchar', {
         nullable: true,
-        default: "github"
+        default: null
     })
-    repoType: RepoType
+    repoType: string
 
-    @Column({ type: 'datetime' })
-    createdAt: Date;
+    @Column({ type: 'int', nullable: true })
+    createdAt: number;
 }

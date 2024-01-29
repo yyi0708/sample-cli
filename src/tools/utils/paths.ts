@@ -10,19 +10,9 @@ export const appConfigFilePath = join(
   '.sample-cli',
   'app.config.json'
 )
-export const createConfigFilePath = join(
-  os.homedir(),
-  '.sample-cli',
-  'create.config.json'
-)
-export const openConfigFilePath = join(
-  os.homedir(),
-  '.sample-cli',
-  'open.config.json'
-)
 
 export const sqlitePath = join(
   os.homedir(),
   '.sample-cli',
-  'database.sqlite'
+  'sample-cli.db'
 )

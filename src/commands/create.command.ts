@@ -1,16 +1,20 @@
 import { Command } from 'commander'
+
 import { Commands } from 'Types/command'
 import { TYPES, injectable, inject, IQuestion } from 'IOC/index'
-import { Message } from '@/src/tools/ui'
-import fuzzy from 'fuzzy'
+import { Message } from 'Tools/ui'
+import { getDataSource, Project } from 'Tools/database'
 
 @injectable()
 export class CreateCommand implements Commands.ICommand {
-  @inject(TYPES.LibConfig) private _config: Config.IConfig
   @inject(TYPES.ActionCreate) private action: Actions.IAction
   @inject(TYPES.LibQuestion) private _question: IQuestion
-  private _configData: Config.UserConfig['create']
+  private _configData: Array<Project> = []
 
+  /**
+   * @function 加载命令逻辑
+   * @param program 
+   */
   public load(program: Command): void {
     program
       .command('create <project>')
@@ -22,16 +26,17 @@ export class CreateCommand implements Commands.ICommand {
       )
       .action(async (project: string, command: Record<string, any>) => {
         try {
+          this._configData = await this.getProjectList()
+          
           const inputs: Input[] = []
           const options: Input[] = []
-          this._configData = await this._config.getConfig('create')
 
           const { directory } = command
           options.push({ name: 'directory', value: directory })
 
-          const templateItem = this._getTemplateItem(
+          const templateItem = this.getTemplateItem(
             project,
-            this._configData.template
+            this._configData
           )
 
           if (templateItem) {
@@ -45,9 +50,10 @@ export class CreateCommand implements Commands.ICommand {
             Message.warn(
               `Oh～ ${project} is not found, Please select from the items below`
             )
-            const raw = await this._selectProject()
+            const raw = await this.selectProject()
 
             const { name, type, content, tips } = raw
+
             inputs.push({ name: 'name', value: name })
             options.push({ name: 'type', value: type })
             options.push({ name: 'content', value: content })
@@ -61,14 +67,38 @@ export class CreateCommand implements Commands.ICommand {
       })
   }
 
-  private _getTemplateItem(
+  /**
+   * @function 获取项目数据库的数据
+   * @returns Project 数据
+   */
+  public async getProjectList(): Promise<Array<Project>> {
+    const dataSource = await getDataSource()
+
+    const projects = await dataSource
+      .getRepository(Project)
+      .createQueryBuilder("project")
+      .getMany()
+    return projects
+  }
+
+  /**
+   * @function 根据输入，返回数据项
+   * @param name 对比字段
+   * @param list 数据列表
+   * @returns 数据列
+   */
+  private getTemplateItem(
     name: string,
-    list: Config.UserConfig['create']['template']
-  ): Template.CreateRow | undefined {
+    list: Array<Project>
+  ): Project | undefined {
     return list.find((item) => item.name === name)
   }
-  // 选择项目
-  private async _selectProject() {
+
+  /**
+   * @function 选择项目
+   * @returns 
+   */
+  private async selectProject() {
     const answers = await this._question.getQuestionAnswer([
       {
         type: 'autocomplete',
@@ -80,15 +110,20 @@ export class CreateCommand implements Commands.ICommand {
       }
     ])
 
-    return this._configData?.template.find((v) => v.name === answers.title)
+    return this._configData?.find((v) => v.name === answers.title)
   }
-  // 搜索🔍
+  /**
+   * @function 搜索🔍
+   * @param answers 
+   * @param input 
+   * @returns 
+   */
   private searchLink(answers, input = '') {
-    const titleList = this._configData?.template.map((item) => item.name)
+    const titleList = this._configData?.map((item) => item.name)
 
     return new Promise((resolve) => {
       setTimeout(() => {
-        const result = fuzzy.filter(input, titleList).map((el) => el.original)
+        const result = this._question.fuzzy.filter(input, titleList).map((el) => el.original)
 
         resolve(result)
       }, Math.random() * 470 + 30)

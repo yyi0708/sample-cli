@@ -1,25 +1,26 @@
 import { pathExists, writeJSON, ensureFile } from 'fs-extra/esm'
-import { Message } from '@/src/tools/ui'
-import {  appConfigFilePath, createConfigFilePath, openConfigFilePath } from '@/src/tools/utils'
-import { appConfig, createConfig, openConfig } from '@/template/default'
 import cfonts from 'cfonts'
+
+import { Message } from 'Tools/ui'
+import {  appConfigFilePath } from 'Tools/utils'
+import { appConfig, ProjectTemplete, LinkTemplete, AsyncModuleTemplete } from '@/template'
+import { getDataSource, AsyncModule, Link, Project, DataSource } from 'Tools/database'
+import { splitSymbol } from 'Tools/utils'
+
 
 // local file map
 const pathData = [
   {
     path: appConfigFilePath,
     data:appConfig
-  },
-  {
-    path: createConfigFilePath,
-    data:createConfig
-  },
-  {
-    path: openConfigFilePath,
-    data:openConfig
-  },
+  }
 ]
-// save file data
+
+/**
+ * @function settingFileByPath save file data
+ * @param path 路径
+ * @param data 文件内容
+ */
 const settingFileByPath = async (path: string, data: Record<string,any>): Promise<void> => {
   const isExistPath = await pathExists(path)
 
@@ -30,23 +31,129 @@ const settingFileByPath = async (path: string, data: Record<string,any>): Promis
     Message.Create_config_success(path)
   }
 }
-// start
-async function bootstrap() {
-  try {
-    // tips
-    Message.sucess('Welcome:')
-    cfonts.say('Sample-cli!', {
-      font: 'pallet', // define the font face
-      align: 'left', // define text alignment
-      colors: ['red', '#333'], // define all colors
-      lineHeight: 0.5,
-      gradient: true
+
+/**
+ * @function settingDb 初始化数据库，建立库
+ */
+const settingDb = async () => {
+  const AppDataSource = await getDataSource();
+
+  await Promise.allSettled([
+    initProjectEntity(AppDataSource),
+    initLinkEntity(AppDataSource),
+    initAsyncModuleEntity(AppDataSource)
+  ])
+
+}
+
+/**
+ * @function 初始化项目模版
+ * @param db 数据库实例
+ */
+async function initProjectEntity(db: DataSource): Promise<void> {
+  const projectEntity = []
+
+  for(const projectItem of ProjectTemplete) {
+    const isHave = await db.manager.findOneBy(Project, {
+      name: projectItem.name
     })
 
-    await Promise.all(pathData.map(item => settingFileByPath(item.path, item.data)))
-  } catch (error) {
-    process.exit(1)
+    if(!isHave) {
+      projectEntity.push({
+        ...projectItem,
+        createdAt: Date.now()
+      })
+    }
   }
+
+  await db.manager.insert(Project, projectEntity)
+}
+
+/**
+ * @function 初始化链接库模版
+ * @param db 数据库实例
+ */
+async function initLinkEntity(db: DataSource): Promise<void> {
+  const entity = []
+
+  for(const item of LinkTemplete) {
+    const isHave = await db.manager.findOneBy(Link, {
+      title: item.title
+    })
+
+    if(!isHave) {
+      entity.push({
+        ...item,
+        createdAt: Date.now()
+      })
+    }
+  }
+
+  await db.manager.insert(Link, entity)
+}
+
+/**
+ * @function 初始化增量库模版
+ * @param db 数据库实例
+ */
+async function initAsyncModuleEntity(db: DataSource): Promise<void> {
+  try {
+    const entity = []
+
+    for(const item of AsyncModuleTemplete) {
+      const isHave = await db.manager.findOneBy(AsyncModule, {
+        name: item.name
+      })
+
+      if(!isHave) {
+        entity.push({
+          ...item,
+          snippet_code: item.snippet_code.join(splitSymbol),
+          createdAt: Date.now()
+        })
+      }
+    }
+
+    console.log(1)
+
+    await db.manager.insert(AsyncModule, entity)
+
+    console.log(1)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+/**
+ * @function 首次安装提示
+ */
+function welcomeTips () {
+  Message.sucess('Welcome to use:')
+
+  cfonts.say('Sample-quick-cli!', {
+    font: 'pallet', // define the font face
+    align: 'left', // define text alignment
+    colors: ['red', '#333'], // define all colors
+    lineHeight: 0.5,
+    gradient: true
+  })
+}
+
+/**
+ * @function start 启动
+ */
+async function bootstrap() {
+  try {
+    await Promise.all([
+      settingDb(),
+      ...pathData.map(item => settingFileByPath(item.path, item.data))
+    ])
+
+    welcomeTips()
+  } catch (error) {
+    console.log(error)
+    process.exit(0)
+  } 
 }
 
 bootstrap()

@@ -33,3 +33,6 @@ export enum LibrarySupport {
   inversify = 'inversify',
   custom = 'custom'
 }
+
+
+export const splitSymbol = ';%'

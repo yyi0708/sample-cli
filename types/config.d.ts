@@ -30,16 +30,7 @@ declare namespace Config {
 
   // 配置文件
   export interface IConfig {
-    // 当前目录下，集成配置文件
-    currentConfig: string
-    read<k extends keyof UserConfig>(key: k): Promise<UserConfig[k]>
-    write<k extends keyof UserConfig>(key: k, val: UserConfig[k]): Promise<void>
-    list(): Promise<UserConfig>
     // 默认配置文件
-    appConfigPath: string
-    projectConfigPath: string
-    openConfigPath:string
     getConfig<k extends keyof UserConfig>(key: k): Promise<UserConfig[k]>
-    rewriteConfig<k extends keyof UserConfig>(key: k, val: UserConfig[k]): Promise<void>
   }
 }

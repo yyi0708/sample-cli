@@ -5,26 +5,26 @@ export class Link extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column({
+    @Column('varchar', {
         unique: true
     })
     title: string
 
-    @Column()
+    @Column('varchar')
     submary: string
 
-    @Column({
+    @Column('varchar', {
         nullable: true,
         default: null
     })
     doc: string
 
-    @Column()
+    @Column('varchar')
     link: string
 
     @Column("simple-array")
     belong: Array<string>
 
-    @Column({ type: 'datetime' })
-    createdAt: Date;
+    @Column({ type: 'int', nullable: true })
+    createdAt: number;
 }

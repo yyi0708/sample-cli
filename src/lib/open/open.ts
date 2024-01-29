@@ -1,10 +1,12 @@
-import open, { openApp, OpenAppOptions, Options } from 'open'
+import open, { openApp, OpenAppOptions, Options, apps } from 'open'
 import { IOpen } from './interface'
 import { injectable } from 'IOC/index'
-import { Message } from '@/src/tools/ui'
+import { Message } from 'Tools/ui'
 
 @injectable()
 export class Open implements IOpen {
+  public apps = apps
+
   public async open(path: string, options?: Options): Promise<void> {
     await open(path, options)
   }

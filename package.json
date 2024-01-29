@@ -11,6 +11,7 @@
     "sc": "dist/index.esm.js"
   },
   "scripts": {
+    "postinstall": "tsx scripts/setup.ts",
     "dev": "tsup --watch",
     "build": "tsup",
     "publish:next": "npm publish --access public --tag next",
@@ -45,7 +46,8 @@
     "@types/inquirer": "^9.0.3",
     "@types/node": "^18.15.11",
     "@types/node-emoji": "^1.8.2",
-    "tsup": "^8.0.1"
+    "tsup": "^8.0.1",
+    "tsx": "^3.14.0"
   },
   "dependencies": {
     "cfonts": "^3.1.1",
@@ -69,7 +71,6 @@
     "sample-quick-cli": "^0.1.7",
     "semver": "^7.5.1",
     "sqlite3": "^5.1.7",
-    "tsx": "^3.12.6",
     "typeorm": "^0.3.19",
     "typescript": "^4.9.5"
   }

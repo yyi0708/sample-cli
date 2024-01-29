@@ -25,7 +25,7 @@ import { Runner } from '@/src/tools/utils'
 export const library = new ContainerModule((bind: interfaces.Bind,) => {
     bind<Download.IDownlaod>(TYPES.LibDownload).to(RemoteDownload)
     bind<IReader>(TYPES.LibReader).to(FileSystemReader)
-    bind<Config.IConfig>(TYPES.LibConfig).to(UserConfig).inSingletonScope()
+    // bind<Config.IConfig>(TYPES.LibConfig).to(UserConfig).inSingletonScope()
     bind<IQuestion>(TYPES.LibQuestion).to(QuestionAnswers)
 
     bind<AbstractRunner>(TYPES.AbstractRunner).to(AbstractRunner)
