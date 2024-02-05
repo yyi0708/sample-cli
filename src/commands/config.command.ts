@@ -69,9 +69,9 @@ export class ConfigCommand implements Commands.ICommand {
             {
                 type: 'input',
                 name: 'path',
-                message: 'Please enter the file path. Defaults: Desktop',
+                message: 'Please enter the file path.',
                 askAnswered: true,
-                default: join(homedir(), 'Desktop', 'demo.csv'),
+                // default: join(homedir(), 'Desktop', 'demo.csv'),
                 validate: function (input) {
                     if (input && extname(input) === '.csv') return true
                 }

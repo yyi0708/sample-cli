@@ -32,15 +32,13 @@ export class ConfigAction implements Actions.IAction {
       } else if (strategy === StrategyOptions.TEMPLETE) {
         // 模版
         await this.createCsvFile(path, [[]], this.getHeadersArr(type, 'write'))
-
-        Message.sucess(`模版已导出，文件地址: ${path}`)
       } else if (strategy === StrategyOptions.IMPORT) {
         const result = await this.readCsvFile(path, this.getHeadersArr(type, 'read'))
 
         // console.log(result, 'result')
         await this.insertToSqlite(type, result, force)
 
-        Message.sucess(`${path}数据已写入本地数据库`)
+        Message.sucess(`${path} 数据已写入本地数据库`)
       }
     } catch (error) {
       throw error
@@ -73,7 +71,8 @@ export class ConfigAction implements Actions.IAction {
     const sgin = type === TempleteType.LINK ? 'title' : 'name'
     const dataEntity = []
     const fieldIsArr = ['depend', 'dev_depend', 'snippet_name', 'scripts', 'belong']
-
+    const repet = []
+    
     for(const item of data) {
       const entityItem = await dataSource.manager.findOneBy(Entity, {
         [sgin]: type === TempleteType.LINK ? item.title : item.name
@@ -95,10 +94,13 @@ export class ConfigAction implements Actions.IAction {
             entityItem[key] = item[key]
           }
           await dataSource.manager.save(entityItem)
+        } else {
+          repet.push(type === TempleteType.LINK ? item.title : item.name)
         }
       }
     }
-  
+    
+    if(repet.length) Message.warn(`本地库存在${repet}，已存在默认不予操作，若更新替换，命令可添加 -f`)
     await dataSource.manager.insert(Entity, dataEntity)
   }
 
@@ -114,7 +116,7 @@ export class ConfigAction implements Actions.IAction {
     this._csv.writeOpts = { headers }
 
     this._csv.create(data).then(() => {
-      Message.sucess(`数据已导出，文件地址: ${path}`)
+      Message.sucess(`文件已导出，路径地址: ${path}`)
     })
   }
 

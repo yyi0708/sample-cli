@@ -41,7 +41,7 @@ export class OpenCommand implements Commands.ICommand {
       .option('-l, --link [link]', 'Direct open Link.')
       .option('-r, --range [range]', 'Type specific query.')
       .option('-d, --direct [direct]', 'Direct open if it only is one.', true)
-      .option('-doc, --doc [doc]', 'Document Links.', false)
+      .option('-doc, --doc [doc]', 'Document Links.', true)
       .option('-b, --browser [browser]', 'The support type is google chrome, firefox, edge, and browserPrivate.', 'google chrome')
       .action(async (name: string, command: Record<OptionParmas, any>) => {
         try {
@@ -49,7 +49,6 @@ export class OpenCommand implements Commands.ICommand {
           let type = OpenType.LINK, target = link
 
           if (!link) {
-
             // 输入具体搜索值, 进行模糊搜索，还是权量
             if (name) {
               const list = await this.getLinkListByName(name, range)

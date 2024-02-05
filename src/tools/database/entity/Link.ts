@@ -10,7 +10,10 @@ export class Link extends BaseEntity {
     })
     title: string
 
-    @Column('varchar')
+    @Column('varchar', {
+        nullable: true,
+        default: null
+    })
     submary: string
 
     @Column('varchar', {
