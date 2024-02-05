@@ -10,6 +10,7 @@ export class CommandLoader {
     container.get<Commands.ICommand>(TYPES.CommandAdd).load(program)
     container.get<Commands.ICommand>(TYPES.CommandInfo).load(program)
     container.get<Commands.ICommand>(TYPES.CommandOpen).load(program)
+    container.get<Commands.ICommand>(TYPES.CommandConfig).load(program)
 
     this.handleInvalidCommand(program)
   }
@@ -23,7 +24,7 @@ export class CommandLoader {
       console.log(
         `See ${chalk.red('--help')} for a list of available commands.\n`
       )
-      process.exit(1)
+      process.exit(0)
     })
   }
 }

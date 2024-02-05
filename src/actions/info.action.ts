@@ -11,7 +11,6 @@ import { platform, release } from 'os'
 import { join } from 'path'
 import { Message } from '@/src/tools/ui'
 import { Runner } from '@/src/tools/utils'
-// const cfonts = require('cfonts')
 import cfonts from 'cfonts'
 
 @injectable()

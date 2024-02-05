@@ -1,4 +1,4 @@
-import { DataSource } from "typeorm"
+import { DataSource, Like } from "typeorm"
 import { sqlitePath } from 'Tools/utils/paths'
 import { Project, RepoType, ProjectType } from './entity/Project'
 import { Link } from "./entity/Link"
@@ -35,4 +35,4 @@ export const getDataSource = (delay = 1000): Promise<DataSource> => {
 };
 
 
-export { Project, RepoType, ProjectType, Link, AsyncModule, DataSource }
+export { Project, RepoType, ProjectType, Link, AsyncModule, DataSource, Like }

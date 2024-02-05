@@ -3,7 +3,6 @@ import { TYPES } from '../types'
 
 import {
     RemoteDownload,
-    UserConfig,
     FileSystemReader,
     IReader,
     IQuestion,
@@ -18,7 +17,9 @@ import {
     YarnPackageManager,
     PnpmPackageManager,
     IOpen,
-    Open
+    Open,
+    CsvFile,
+    ICsvType
   } from 'Lib/module'
 import { Runner } from '@/src/tools/utils'
 
@@ -60,6 +61,9 @@ export const library = new ContainerModule((bind: interfaces.Bind,) => {
 
     // open
     bind<IOpen>(TYPES.LibOpen).to(Open)
+
+    // csv
+    bind<ICsvType>(TYPES.LibCsv).to(CsvFile)
 })
 
-export { IOpen }
+export { IOpen, ICsvType }

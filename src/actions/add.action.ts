@@ -11,7 +11,7 @@ import {
   Runner
 } from 'Tools/utils'
 import { Message } from 'Tools/ui'
-import { getDataSource, AsyncModule } from 'Tools/database'
+import { getDataSource, AsyncModule, Like } from 'Tools/database'
 import { join } from 'node:path'
 import { splitSymbol } from 'Tools/utils'
 
@@ -30,11 +30,25 @@ export class AddAction implements Actions.IAction {
     extraFlags?: string[]
   ): Promise<void> {
     try {
-      this.asyncModuleList = await this.getSupportFunctionList()
+      const moudle = inputs.find((item) => item.name === 'moudle')?.value as string
 
+      if (moudle) {
+        const list = await this.getSupportFunctionListByName(moudle)
+
+        if (list.length) {
+          this.asyncModuleList = list
+        } else {
+          Message.warn(`Oh～ ${moudle} is not found!`)
+          process.exit(0)
+        }
+      } else {
+        this.asyncModuleList = await this.getSupportFunctionList()
+      }
+
+      // 进入筛选
       const raw = await this.selectProject()
-
       const { type, depend, dev_depend, name, snippet_code, snippet_name, remote_address, scripts } = raw
+
       // 获取包管理器
       const packageManagerName = await this.getPackageManagerType()
       const packageManager: AbstractPackageManager = await this._packageManagerFactory(packageManagerName)
@@ -112,6 +126,19 @@ export class AddAction implements Actions.IAction {
       .getMany()
 
     return asyncModuleList
+  }
+
+  /**
+   * @function 模糊查询，获取项目数据库的数据
+   * @returns Project 数据
+   */
+  public async getSupportFunctionListByName(name: string): Promise<Array<AsyncModule> | null> {
+    const dataSource = await getDataSource()
+
+    const moudles = await dataSource.manager.findBy(AsyncModule, {
+      name: Like(`%${name}%`)
+    })
+    return moudles
   }
 
   /**

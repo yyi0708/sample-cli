@@ -1,19 +1,20 @@
 {
   "name": "sample-quick-cli",
-  "version": "0.1.7",
+  "version": "0.1.14",
   "description": "Ability to create projects quickly and provide module services incrementally.",
-  "main": "dist/index.esm.js",
-  "types": "./dist/index.d.ts",
+  "main": "dist/src/index.esm.js",
+  "types": "./dist/src/index.d.ts",
   "type": "module",
   "bin": {
-    "sample-quick-cli": "dist/index.esm.js",
-    "sqc": "dist/index.esm.js",
-    "sc": "dist/index.esm.js"
+    "sample-quick-cli": "dist/src/index.esm.js",
+    "sqc": "dist/src/index.esm.js",
+    "sc": "dist/src/index.esm.js"
   },
   "scripts": {
-    "postinstall": "tsx scripts/setup.ts",
+    "postinstall": "node dist/scripts/setup.esm.js",
     "dev": "tsup --watch",
     "build": "tsup",
+    "demo": "tsx scripts/demo.ts",
     "publish:next": "npm publish --access public --tag next",
     "prepublish:npm": "npm run build",
     "publish:npm": "npm publish --access public"
@@ -57,6 +58,7 @@
     "cross-spawn": "^7.0.3",
     "download": "^8.0.0",
     "download-git-repo": "^3.0.2",
+    "fast-csv": "^5.0.0",
     "fast-glob": "^3.2.12",
     "fs-extra": "^11.1.1",
     "fuzzy": "^0.1.3",

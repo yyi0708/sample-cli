@@ -24,7 +24,7 @@ export class OpenAction implements Actions.IAction {
       const target = (options.find((item) => item.name === 'target')?.value ||
         '') as string
       const browser = (options.find((item) => item.name === 'browser')?.value ||
-      'google chrome') as unknown as string
+      this._open.apps.chrome) as unknown as string
 
       await this.execOpen(type, target, browser)
     } catch (error) {
@@ -56,9 +56,9 @@ export class OpenAction implements Actions.IAction {
           Message.warn('打开类型 格式无效')
       }
 
-      process.exit(1)
+      process.exit(0)
     } catch (error: any) {
-      Message.fail('[Error]: ' + error.message)
+      Message.fail(`[Error]: ${error.message}`)
     }
   }
 }

@@ -14,7 +14,7 @@ export class InfoCommand implements Commands.ICommand {
         try {
           await this.action.handle()
         } catch (err) {
-          process.exit(1)
+          process.exit(0)
         }
       })
   }

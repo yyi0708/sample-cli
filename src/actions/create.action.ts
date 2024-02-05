@@ -1,4 +1,4 @@
-import { injectable, inject, TYPES, IPackageManagerFactory } from 'IOC/index'
+import { injectable, inject, TYPES, IPackageManagerFactory, IReader, AbstractPackageManager } from 'IOC/index'
 import { Message } from '@/src/tools/ui'
 import { Runner } from '@/src/tools/utils'
 
@@ -6,6 +6,7 @@ import { Runner } from '@/src/tools/utils'
 export class CreateAction implements Actions.IAction {
   @inject(TYPES.LibPackageManagerFactory) private _packageManagerFactory: IPackageManagerFactory
   @inject(TYPES.LibDownload) private _downloader: Download.IDownlaod
+  @inject(TYPES.LibReader) private _reader: IReader
 
   public async handle(
     inputs?: Input[],
@@ -43,10 +44,21 @@ export class CreateAction implements Actions.IAction {
 
   private async _execScripts(commandLine: string) {
     try {
-      const packageManager = await this._packageManagerFactory(Runner.NPM)
+      const files = await this._reader.readdir('.')
+      let packageManager: AbstractPackageManager
+
+      if (files.findIndex((filename) => filename === 'pnpm-lock.yaml') > -1) {
+        packageManager = this._packageManagerFactory(Runner.PNPM)
+      } else if (files.findIndex((filename) => filename === 'yarn.lock') > -1) {
+        packageManager = this._packageManagerFactory(Runner.YARN)
+      } else {
+        packageManager = this._packageManagerFactory(Runner.NPM)
+      }
+
+      // const packageManager = await this._packageManagerFactory(Runner.NPM)
 
       // verify command line.
-      const flags = ['npm', 'npx']
+      const flags = ['npm', 'npx', 'pnpm', 'yarn']
       const status = flags.some((item) => commandLine.includes(item))
       if (!status)
         throw new TypeError('The command content format in the template is incorrect！')

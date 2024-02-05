@@ -114,11 +114,7 @@ async function initAsyncModuleEntity(db: DataSource): Promise<void> {
       }
     }
 
-    console.log(1)
-
     await db.manager.insert(AsyncModule, entity)
-
-    console.log(1)
   } catch (error) {
     console.log(error)
   }

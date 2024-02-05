@@ -3,7 +3,7 @@ import { Command } from 'commander'
 import { Commands } from 'Types/command'
 import { TYPES, injectable, inject, IQuestion } from 'IOC/index'
 import { Message } from 'Tools/ui'
-import { getDataSource, Project } from 'Tools/database'
+import { getDataSource, Project, Like } from 'Tools/database'
 
 @injectable()
 export class CreateCommand implements Commands.ICommand {
@@ -17,7 +17,7 @@ export class CreateCommand implements Commands.ICommand {
    */
   public load(program: Command): void {
     program
-      .command('create <project>')
+      .command('create [project]')
       .alias('c')
       .description('create application.')
       .option(
@@ -26,43 +26,36 @@ export class CreateCommand implements Commands.ICommand {
       )
       .action(async (project: string, command: Record<string, any>) => {
         try {
-          this._configData = await this.getProjectList()
+          // 输入具体搜索值, 进行模糊搜索，还是权量
+          if (project) {
+            const list = await this.getProjectListByName(project)
+
+            if (list.length) {
+              this._configData = list
+            } else {
+              Message.warn(`Oh～ ${project} is not found!`)
+              process.exit(0)
+            }
+          } else {
+            this._configData = await this.getProjectList()
+          }
+
+          const raw = await this.selectProject()
+          const { name, type, content, tips } = raw
           
           const inputs: Input[] = []
           const options: Input[] = []
 
           const { directory } = command
           options.push({ name: 'directory', value: directory })
-
-          const templateItem = this.getTemplateItem(
-            project,
-            this._configData
-          )
-
-          if (templateItem) {
-            const { name, type, content, tips } = templateItem
-
-            inputs.push({ name: 'name', value: name })
-            options.push({ name: 'type', value: type })
-            options.push({ name: 'content', value: content })
-            options.push({ name: 'tips', value: tips })
-          } else {
-            Message.warn(
-              `Oh～ ${project} is not found, Please select from the items below`
-            )
-            const raw = await this.selectProject()
-
-            const { name, type, content, tips } = raw
-
-            inputs.push({ name: 'name', value: name })
-            options.push({ name: 'type', value: type })
-            options.push({ name: 'content', value: content })
-            options.push({ name: 'tips', value: tips })
-          }
+          inputs.push({ name: 'name', value: name })
+          options.push({ name: 'type', value: type })
+          options.push({ name: 'content', value: content })
+          options.push({ name: 'tips', value: tips })
 
           await this.action.handle(inputs, options)
         } catch (err) {
-          process.exit(1)
+          process.exit(0)
         }
       })
   }
@@ -78,6 +71,19 @@ export class CreateCommand implements Commands.ICommand {
       .getRepository(Project)
       .createQueryBuilder("project")
       .getMany()
+    return projects
+  }
+
+  /**
+   * @function 模糊查询，获取项目数据库的数据
+   * @returns Project 数据
+   */
+  public async getProjectListByName(name: string): Promise<Array<Project> | null> {
+    const dataSource = await getDataSource()
+
+    const projects = await dataSource.manager.findBy(Project, {
+      name: Like(`%${name}%`)
+    })
     return projects
   }
 

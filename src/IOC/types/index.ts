@@ -4,12 +4,14 @@ export const TYPES = {
   CommandCreate: Symbol.for('CommandCreate'),
   CommandInfo: Symbol.for('CommandInfo'),
   CommandOpen: Symbol.for('CommandOpen'),
+  CommandConfig: Symbol.for('CommandConfig'),
 
   // actions
   ActionAdd: Symbol.for('ActionAdd'),
   ActionCreate: Symbol.for('ActionCreate'),
   ActionInfo: Symbol.for('ActionInfo'),
   ActionOpen: Symbol.for('ActionOpen'),
+  ActionConfig: Symbol.for('ActionConfig'),
 
   // lib
   LibDownload: Symbol.for('LibDownload'),
@@ -23,5 +25,6 @@ export const TYPES = {
   LibPackageManager: Symbol.for('LibPackageManager'),
   AbstractPackageManager: Symbol.for('AbstractPackageManager'),
   LibPackageManagerFactory: Symbol.for('LibPackageManagerFactory'),
-  LibOpen: Symbol.for('LibOpen')
+  LibOpen: Symbol.for('LibOpen'),
+  LibCsv: Symbol.for('LibCsv')
 }

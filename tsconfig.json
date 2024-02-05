@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": "./",
-    "target": "ESNext",
+    "target": "ES2018",
     "module": "ESNext",
     "moduleResolution": "node",
     "declaration": false,

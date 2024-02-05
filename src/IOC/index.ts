@@ -23,5 +23,6 @@ export {
   IRunnerFactory,
   AbstractPackageManager,
   IPackageManagerFactory,
-  IOpen
+  IOpen,
+  ICsvType
 } from 'Lib/module'

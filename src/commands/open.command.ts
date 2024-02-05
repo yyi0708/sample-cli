@@ -2,7 +2,8 @@ import { Command } from 'commander'
 
 import { Commands } from 'Types/command'
 import { TYPES, injectable, inject, IQuestion, IReader, IOpen } from 'IOC/index'
-import { getDataSource, Link } from 'Tools/database'
+import { getDataSource, Link, Like } from 'Tools/database'
+import { Message } from 'Tools/ui'
 
 
 enum OpenType {
@@ -16,7 +17,7 @@ enum OpenStrategy {
   TOOL = 'tool'
 }
 
-type OptionParmas = 'file' | 'source' | 'target' | 'listType' | 'doc'
+type OptionParmas = 'range' | 'direct' | 'browser' | 'link' | 'doc'
 
 @injectable()
 export class OpenCommand implements Commands.ICommand {
@@ -34,51 +35,63 @@ export class OpenCommand implements Commands.ICommand {
    */
   public load(program: Command): void {
     program
-      .command('open')
+      .command('open [name]')
       .alias('o')
-      .description('Quickly open link. Include files,url,app')
-      .option('-f, --file [file]', 'Where is config file.')
-      .option('-s, --source [source]', 'Open what type of resource.', 'link')
-      .option('-t, --target [target]', 'Normal templete urls.')
-      .option(
-        '-l, --listType [templete]',
-        'what way is templete lists show.',
-        'search'
-      )
-      .option('-d, --doc [show doc]', 'what way is templete lists show.')
-      .action(async (command: Record<OptionParmas, any>) => {
+      .description('Quickly open link.')
+      .option('-l, --link [link]', 'Direct open Link.')
+      .option('-r, --range [range]', 'Type specific query.')
+      .option('-d, --direct [direct]', 'Direct open if it only is one.', true)
+      .option('-doc, --doc [doc]', 'Document Links.', false)
+      .option('-b, --browser [browser]', 'The support type is google chrome, firefox, edge, and browserPrivate.', 'google chrome')
+      .action(async (name: string, command: Record<OptionParmas, any>) => {
         try {
-          this._configOpenData = await this.getLinkList()
+          const { range, direct, browser, link, doc } = command
+          let type = OpenType.LINK, target = link
 
-          const options: Input[] = []
+          if (!link) {
 
-          // 路径参数有值
-          if (command.target) {
-            options.push({ name: 'type', value: command.source })
-            options.push({ name: 'target', value: command.target })
+            // 输入具体搜索值, 进行模糊搜索，还是权量
+            if (name) {
+              const list = await this.getLinkListByName(name, range)
 
-            await this.action.handle([], options)
-          } else {
-            // 策略问题：1位模版展示，2则工具打开
-            const answers = await this.getQuestionAnswers()
-
-            if (answers.strategy === OpenStrategy.TEMP) {
-              const path = await this.getTempleteQuestionAnswers(
-                command.listType,
-                !!command.doc
-              )
-
-              options.push({ name: 'target', value: path })
-
-              await this.action.handle([], options)
+              if (list.length) {
+                this._configOpenData = list
+              } else {
+                Message.warn(`Oh～ ${name} is not found!`)
+                process.exit(0)
+              }
             } else {
-              options.push({ name: 'type', value: answers.type })
-              options.push({ name: 'target', value: answers.target })
-              options.push({ name: 'browser', value: answers.browser })
+              let list = []
+              if (range) {
+                list = await this.getLinkListByName(name, range)
+              } else {
+                list = await this.getLinkList()
+              }
 
-              await this.action.handle([], options)
+              if (list.length) {
+                this._configOpenData = list
+              } else {
+                Message.warn(`Oh～ ${range} is not found!`)
+                process.exit(0)
+              }
+            }
+
+            // 若搜索结果存在一个，并且控制变量打开，则直接打开
+            if (name && direct && this._configOpenData.length === 1) {
+              target = doc ? (this._configOpenData[0].doc || this._configOpenData[0].link) : (this._configOpenData[0].link || this._configOpenData[0].doc)
+            } else {
+              const raw = await this.selectProject()
+
+              target = doc ? (raw.doc || raw.link) : (raw.link || raw.doc)
             }
           }
+
+          const options: Input[] = []
+          options.push({ name: 'type', value: type })
+          options.push({ name: 'target', value: target })
+          options.push({ name: 'browser', value: browser })
+
+          await this.action.handle([], options)
         } catch (err) {
           throw err
         }
@@ -87,7 +100,7 @@ export class OpenCommand implements Commands.ICommand {
 
   /**
    * @function 获取链接数据库的数据
-   * @returns Project 数据
+   * @returns Link 数据
    */
   public async getLinkList(): Promise<Array<Link>> {
     const dataSource = await getDataSource()
@@ -96,6 +109,24 @@ export class OpenCommand implements Commands.ICommand {
       .getRepository(Link)
       .createQueryBuilder("link")
       .getMany()
+
+    return links
+  }
+
+
+  /**
+   * @function 获取链接数据库的数据
+   * @returns Link 数据
+   */
+  public async getLinkListByName(name: string, type: string): Promise<Array<Link> | null> {
+    const dataSource = await getDataSource()
+
+    const param = Object.create({})
+
+    if (type) param.belong = Like(`%${type}%`)
+    if (name) param.title = Like(`%${name}%`)
+
+    const links = await dataSource.manager.findBy(Link, param)
 
     return links
   }
@@ -189,7 +220,6 @@ export class OpenCommand implements Commands.ICommand {
     showDoc: boolean
   ) {
     try {
-      // TODO: 搜索、列表 inquirer-file-tree-selection
       const answers = await this._question.getQuestionAnswer([
         {
           type: 'autocomplete',
@@ -212,11 +242,31 @@ export class OpenCommand implements Commands.ICommand {
   }
 
   /**
+   * @function 选择项目
+   * @returns 
+   */
+  private async selectProject() {
+    const answers = await this._question.getQuestionAnswer([
+      {
+        type: 'autocomplete',
+        name: 'title',
+        message: 'Please input your want to open what word.',
+        searchText: 'We are searching the resource for you!',
+        emptyText: 'Nothing found!',
+        source: this.searchLink.bind(this)
+      }
+    ])
+
+    return this._configOpenData?.find((v) => v.title === answers.title)
+  }
+  /**
    * @function 搜索🔍
-   * @returns void
+   * @param answers 
+   * @param input 
+   * @returns 
    */
   private searchLink(answers, input = '') {
-    const titleList = this._configOpenData.map((item) => item.title)
+    const titleList = this._configOpenData?.map((item) => item.title)
 
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -226,4 +276,5 @@ export class OpenCommand implements Commands.ICommand {
       }, Math.random() * 470 + 30)
     })
   }
+
 }
